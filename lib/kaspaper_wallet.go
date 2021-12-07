@@ -5,9 +5,12 @@ import (
 	"github.com/svarogg/kaspaper/model"
 )
 
-type KaspaperWallet struct{
+// Make sure we implement model.KaspaperWallet
+var _ model.KaspaperWallet = &KaspaperWallet{}
+
+type KaspaperWallet struct {
 	encryptedPrivateKeys []*keys.EncryptedMnemonic
-	extendedPublicKeys []string
+	extendedPublicKeys   []string
 }
 
 func (k KaspaperWallet) Mnemonic() model.MnemonicString {
@@ -21,4 +24,3 @@ func (k KaspaperWallet) KeysJSON() string {
 func (k KaspaperWallet) Address(index int) string {
 	panic("implement me")
 }
-

@@ -6,6 +6,9 @@ import (
 	"github.com/svarogg/kaspaper/model"
 )
 
+// Make sure we implement model.KaspaperWallet
+var _ model.KaspaperAPI = &KaspaperAPI{}
+
 type KaspaperAPI struct {
 }
 

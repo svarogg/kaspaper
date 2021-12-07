@@ -1,7 +1,7 @@
 package model
 
-type KaspaperAPI interface{
-	GenerateWallet() KaspaperWallet
+type KaspaperAPI interface {
+	GenerateWallet() (KaspaperWallet, error)
 }
 
 type KaspaperWallet interface {
