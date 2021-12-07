@@ -1,9 +1,13 @@
 package lib
 
-import "github.com/svarogg/kaspaper/model"
+import (
+	"github.com/kaspanet/kaspad/cmd/kaspawallet/keys"
+	"github.com/svarogg/kaspaper/model"
+)
 
 type KaspaperWallet struct{
-	
+	encryptedPrivateKeys []*keys.EncryptedMnemonic
+	extendedPublicKeys []string
 }
 
 func (k KaspaperWallet) Mnemonic() model.MnemonicString {
