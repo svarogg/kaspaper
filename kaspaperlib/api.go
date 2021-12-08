@@ -10,10 +10,10 @@ import (
 var _ model.KaspaperAPI = &api{}
 
 type api struct {
-	dagParams dagconfig.Params
+	dagParams *dagconfig.Params
 }
 
-func NewAPI(dagParams dagconfig.Params) model.KaspaperAPI {
+func NewAPI(dagParams *dagconfig.Params) model.KaspaperAPI {
 	return &api{dagParams: dagParams}
 }
 

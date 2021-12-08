@@ -18,13 +18,16 @@ type wallet struct {
 	mnemonic  *model.MnemonicString
 	keysFile  *keys.File
 	keysJSON  string
+	password  string
 }
 
 func newWallet(dagParams *dagconfig.Params, mnemonic string) (model.KaspaperWallet, error) {
 	mnemonicString := &model.MnemonicString{}
 	copy(mnemonicString[:], strings.Split(mnemonic, " ")) // We assume it splits to 24 words
 
-	keysFile, err := keys.NewFileFromMnemonics(dagParams, mnemonicString.String(), "")
+	password := generatePassword()
+
+	keysFile, err := keys.NewFileFromMnemonics(dagParams, mnemonicString.String(), password)
 	if err != nil {
 		return nil, err
 	}
@@ -38,6 +41,7 @@ func newWallet(dagParams *dagconfig.Params, mnemonic string) (model.KaspaperWall
 		mnemonic:  mnemonicString,
 		keysFile:  keysFile,
 		keysJSON:  keysJSON,
+		password:  password,
 	}, nil
 }
 
