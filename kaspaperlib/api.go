@@ -12,6 +12,10 @@ var _ model.KaspaperAPI = &api{}
 type api struct {
 }
 
+func NewAPI() model.KaspaperAPI {
+	return &api{}
+}
+
 func (a *api) GenerateWallet() (model.KaspaperWallet, error) {
 	encryptedMnemonics, extendedPublicKeys, err :=
 		keys.CreateMnemonics(&dagconfig.MainnetParams, 1, "", false)
@@ -19,5 +23,5 @@ func (a *api) GenerateWallet() (model.KaspaperWallet, error) {
 		return nil, err
 	}
 	// It's safe to use [0] because we know there's exactly 1 key, since we passed numKeys: 1 to CreateMnemonics
-	return newWallet(encryptedMnemonics[0], extendedPublicKeys[0]), nil
+	return newWallet(encryptedMnemonics[0], extendedPublicKeys[0])
 }

@@ -10,6 +10,6 @@ func decryptMnemonic(encryptedMnemonic *keys.EncryptedMnemonic) (*model.Mnemonic
 	if err != nil {
 		return nil, err
 	}
-	// Panice so that I can see how the hell this looks
+	// Panic so that I can see how the hell this looks // TODO: REMOVE
 	panic(decryptedMnemonic)
 }
