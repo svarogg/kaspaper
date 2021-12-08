@@ -2,6 +2,7 @@ package kaspaperlib
 
 import (
 	"github.com/kaspanet/kaspad/cmd/kaspawallet/libkaspawallet"
+	"github.com/kaspanet/kaspad/domain/dagconfig"
 	"github.com/svarogg/kaspaper/model"
 )
 
@@ -9,10 +10,11 @@ import (
 var _ model.KaspaperAPI = &api{}
 
 type api struct {
+	dagParams dagconfig.Params
 }
 
-func NewAPI() model.KaspaperAPI {
-	return &api{}
+func NewAPI(dagParams dagconfig.Params) model.KaspaperAPI {
+	return &api{dagParams: dagParams}
 }
 
 func (a *api) GenerateWallet() (model.KaspaperWallet, error) {
@@ -21,5 +23,5 @@ func (a *api) GenerateWallet() (model.KaspaperWallet, error) {
 		return nil, err
 	}
 	// It's safe to use [0] because we know there's exactly 1 key, since we passed numKeys: 1 to CreateMnemonics
-	return newWallet(mnemonics)
+	return newWallet(a.dagParams, mnemonics)
 }

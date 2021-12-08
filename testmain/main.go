@@ -4,11 +4,13 @@ import (
 	"fmt"
 	"os"
 
+	"github.com/kaspanet/kaspad/domain/dagconfig"
+
 	"github.com/svarogg/kaspaper/kaspaperlib"
 )
 
 func main() {
-	api := kaspaperlib.NewAPI()
+	api := kaspaperlib.NewAPI(dagconfig.MainnetParams)
 	wallet, err := api.GenerateWallet()
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Error from GenerateWallet: %s", err)
