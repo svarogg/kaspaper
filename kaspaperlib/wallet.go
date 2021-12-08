@@ -1,7 +1,8 @@
 package kaspaperlib
 
 import (
-	"github.com/kaspanet/kaspad/cmd/kaspawallet/keys"
+	"strings"
+
 	"github.com/svarogg/kaspaper/model"
 )
 
@@ -12,13 +13,12 @@ type wallet struct {
 	mnemonic *model.MnemonicString
 }
 
-func newWallet(encryptedMnemonic *keys.EncryptedMnemonic, extendedPublicKey string) (*wallet, error) {
-	mnemonic, err := decryptMnemonic(encryptedMnemonic)
-	if err != nil {
-		return nil, err
-	}
+func newWallet(mnemonic string) (model.KaspaperWallet, error) {
+	mnemonicString := &model.MnemonicString{}
+	copy(mnemonicString[:], strings.Split(mnemonic, " ")) // We assume it splits to 24 words
+
 	return &wallet{
-		mnemonic: mnemonic,
+		mnemonic: mnemonicString,
 	}, nil
 }
 
