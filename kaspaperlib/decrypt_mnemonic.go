@@ -1,6 +1,8 @@
 package kaspaperlib
 
 import (
+	"strings"
+
 	"github.com/kaspanet/kaspad/cmd/kaspawallet/keys"
 	"github.com/svarogg/kaspaper/model"
 )
@@ -10,6 +12,9 @@ func decryptMnemonic(encryptedMnemonic *keys.EncryptedMnemonic) (*model.Mnemonic
 	if err != nil {
 		return nil, err
 	}
-	// Panic so that I can see how the hell this looks // TODO: REMOVE
-	panic(decryptedMnemonic)
+
+	mnemonicString := &model.MnemonicString{}
+	copy(mnemonicString[:], strings.Split(decryptedMnemonic, " ")) // We assume it splits to 24 words
+
+	return mnemonicString, nil
 }
