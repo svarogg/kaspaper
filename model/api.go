@@ -1,7 +1,5 @@
 package model
 
-const NumThreads = 8
-
 type KaspaperAPI interface {
 	GenerateWallet() (KaspaperWallet, error)
 }
