@@ -66,7 +66,9 @@ func (w *wallet) Address(index int) (string, error) {
 }
 
 func (w *wallet) QR() ([]byte, error) {
-	qr, err := qrcode.Encode(fmt.Sprintf("kaspamnemonic:%s", w.mnemonic), qrcode.High, 256)
+	contents := fmt.Sprintf("kaspamnemonic:%s", strings.Join(w.mnemonic[:], "."))
+
+	qr, err := qrcode.Encode(contents, qrcode.High, 256)
 	if err != nil {
 		return nil, errors.WithStack(err)
 	}
