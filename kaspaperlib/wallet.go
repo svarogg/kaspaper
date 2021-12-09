@@ -57,7 +57,7 @@ func (w *wallet) KeysJSON() string {
 }
 
 func (w *wallet) Address(index int) (string, error) {
-	path := fmt.Sprintf("m/%d/%d", 1, index)
+	path := fmt.Sprintf("m/%d/%d", libkaspawallet.ExternalKeychain, index)
 	address, err := libkaspawallet.Address(w.dagParams, w.keysFile.ExtendedPublicKeys, 1, path, false)
 	if err != nil {
 		return "", err
