@@ -4,12 +4,12 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/kaspanet/kaspad/cmd/kaspawallet/libkaspawallet"
-
-	"github.com/kaspanet/kaspad/domain/dagconfig"
+	"github.com/pkg/errors"
 
 	"github.com/kaspanet/kaspad/cmd/kaspawallet/keys"
-
+	"github.com/kaspanet/kaspad/cmd/kaspawallet/libkaspawallet"
+	"github.com/kaspanet/kaspad/domain/dagconfig"
+	"github.com/skip2/go-qrcode"
 	"github.com/svarogg/kaspaper/model"
 )
 
@@ -65,10 +65,23 @@ func (w *wallet) Address(index int) (string, error) {
 	return address.String(), nil
 }
 
-func (w *wallet) QR() []byte {
-	panic("implement me")
+func (w *wallet) QR() ([]byte, error) {
+	qr, err := qrcode.Encode(fmt.Sprintf("kaspamnemonic:%s", w.mnemonic), qrcode.High, 256)
+	if err != nil {
+		return nil, errors.WithStack(err)
+	}
+	return qr, nil
 }
 
-func (w *wallet) AddressQR() []byte {
-	panic("implement me")
+func (w *wallet) AddressQR(index int) ([]byte, error) {
+	address, err := w.Address(index)
+	if err != nil {
+		return nil, err
+	}
+
+	qr, err := qrcode.Encode(address, qrcode.High, 256)
+	if err != nil {
+		return nil, errors.WithStack(err)
+	}
+	return qr, nil
 }

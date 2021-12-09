@@ -2,7 +2,10 @@ module github.com/svarogg/kaspaper
 
 go 1.17
 
-require github.com/kaspanet/kaspad v0.11.6
+require (
+	github.com/kaspanet/kaspad v0.11.6
+	github.com/skip2/go-qrcode v0.0.0-20200617195104-da1b6568686e
+)
 
 require (
 	github.com/btcsuite/btcutil v1.0.2 // indirect
