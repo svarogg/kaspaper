@@ -7,7 +7,7 @@ type KaspaperAPI interface {
 type KaspaperWallet interface {
 	Mnemonic() *MnemonicString
 	KeysJSON() string
-	Address(index int) string
+	Address(index int) (string, error)
 	QR() []byte
 	AddressQR() []byte
 }

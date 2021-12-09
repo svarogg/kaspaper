@@ -1,7 +1,10 @@
 package kaspaperlib
 
 import (
+	"fmt"
 	"strings"
+
+	"github.com/kaspanet/kaspad/cmd/kaspawallet/libkaspawallet"
 
 	"github.com/kaspanet/kaspad/domain/dagconfig"
 
@@ -53,8 +56,13 @@ func (w *wallet) KeysJSON() string {
 	return w.keysJSON
 }
 
-func (w *wallet) Address(index int) string {
-	panic("implement me")
+func (w *wallet) Address(index int) (string, error) {
+	path := fmt.Sprintf("m/%d/%d", 1, index)
+	address, err := libkaspawallet.Address(w.dagParams, w.keysFile.ExtendedPublicKeys, 1, path, false)
+	if err != nil {
+		return "", err
+	}
+	return address.String(), nil
 }
 
 func (w *wallet) QR() []byte {
