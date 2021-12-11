@@ -20,7 +20,6 @@ type wallet struct {
 	dagParams *dagconfig.Params
 	mnemonic  *model.MnemonicString
 	keysFile  *keys.File
-	keysJSON  string
 	password  string
 }
 
@@ -34,26 +33,17 @@ func newWallet(dagParams *dagconfig.Params, mnemonic string) (model.KaspaperWall
 	if err != nil {
 		return nil, err
 	}
-	keysJSON, err := keysFile.JSONString()
-	if err != nil {
-		return nil, err
-	}
 
 	return &wallet{
 		dagParams: dagParams,
 		mnemonic:  mnemonicString,
 		keysFile:  keysFile,
-		keysJSON:  keysJSON,
 		password:  password,
 	}, nil
 }
 
 func (w *wallet) Mnemonic() *model.MnemonicString {
 	return w.mnemonic
-}
-
-func (w *wallet) KeysJSON() string {
-	return w.keysJSON
 }
 
 func (w *wallet) Address(index int) (string, error) {
