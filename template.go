@@ -1,19 +1,41 @@
 package main
 
 import (
+	"bytes"
 	_ "embed"
 	"encoding/base64"
+	"text/template"
 
 	"github.com/svarogg/kaspaper/model"
 )
 
 //go:embed template.html
-var template string
+var templateString string
 
 type walletTemplate struct {
 	Mnemonic  *model.MnemonicString
 	Address   string
 	AddressQR string
+}
+
+func renderWallet(wallet model.KaspaperWallet) (string, error) {
+	walletTemplate, err := walletToWalletTempalte(wallet)
+	if err != nil {
+		return "", err
+	}
+
+	tmpl, err := template.New("kaspaper").Parse(templateString)
+	if err != nil {
+		return "", err
+	}
+
+	buf := &bytes.Buffer{}
+	err = tmpl.Execute(buf, walletTemplate)
+	if err != nil {
+		return "", err
+	}
+
+	return buf.String(), nil
 }
 
 func walletToWalletTempalte(wallet model.KaspaperWallet) (*walletTemplate, error) {
