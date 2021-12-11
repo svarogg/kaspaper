@@ -1,0 +1,27 @@
+<html>
+    <head>
+        <title>KASPAPER - KASPA Paper Wallet</title>
+    </head>
+    <body>
+        <h1>KASPAPER - KASPA Paper Wallet</h1>
+        <div>
+            <h2>Private info</h2>
+            (keep private)<br/>
+            Your mnemonic phrase:
+            <ol>
+                {{range .Mnemonic}}
+                    <li>{{.}}</li>
+                {{end}}
+            </ol>
+        </div>
+        <div>
+            <h2>Public info</h2>
+            (Show to people who wish to send you KASPA)<br/>
+            <p>Your address: {{.Address}}</p>
+            <p>
+                Your address QR code: <br/>
+                <img src="data:image/png;base64, {{.AddressQR}}" alt="Address QR" />
+            </p>
+        </div>
+    </body>
+</html>
