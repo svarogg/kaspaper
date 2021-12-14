@@ -13,3 +13,8 @@ Feel free to edit `template.html` before compiling to customize the look and fee
 kaspaper [/path/to/wallet.html]
 ```
 Then open the generated wallet file from your browser, print and gift to your loved ones. 
+
+# Support my work
+
+Kaspa donation address to support my work on this wallet and other projects:
+```kaspa:qr4u3xjnsn9vyfeaa5u8qpkmhkxptajt2nlx8n8tx86kmwqczh6m24sqes5z9```
