@@ -24,10 +24,11 @@ func renderWallet(wallet model.KaspaperWallet) (string, error) {
 		return "", err
 	}
 
-	tmpl, err := template.New("kaspaper").Parse(templateString)
-	if err != nil {
-		return "", err
+	funcMap := template.FuncMap{
+		"sub": func(str string, i, j int) string { return str[i:j] },
 	}
+
+	tmpl := template.Must(template.New("kaspaper").Funcs(funcMap).Parse(templateString))
 
 	buf := &bytes.Buffer{}
 	err = tmpl.Execute(buf, walletTemplate)

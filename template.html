@@ -95,9 +95,9 @@
                 float: right;
                 font-family: monospace;
                 font-size: 30pt;
+                margin-top: 10px;
                 margin-right: 50px;
-                width: 400px;
-                word-wrap: break-word;
+                text-align: right;
             }
 
             #QR {
@@ -110,13 +110,7 @@
                 margin-top : -45px;
                 margin-left: 300px;
             }
-
-            #bg1 {
-                position: absolute;
-                left:0px;
-                top:0px;
-                z-index:-1;
-            }
+            
         </style>
         <title>KASPAPER — KASPA Paper Wallet</title>
     </head>
@@ -168,8 +162,12 @@ AS<span style="font-family:Brush Script MT, Brush Script Std, cursive">PAPER</sp
                 <div class = "QR">
                     <img id = "QR" src="data:image/png;base64, {{.AddressQR}}" alt="Address QR" />
                 </div>
-                <div class="addr">
-                    {{.Address}}
+                <div class="addr">         
+                    {{sub .Address 0 18}}<br>
+                    {{sub .Address 18 30}}<br>
+                    {{sub .Address 30 42}}<br>
+                    {{sub .Address 42 54}}<br>
+                    {{sub .Address 54 67}}<br>
                 </div>
             </div>
         </page>
