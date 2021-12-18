@@ -97,6 +97,7 @@
                 font-size: 30pt;
                 margin-top: 10px;
                 margin-right: 50px;
+                text-align: right;
             }
 
             #QR {
@@ -163,10 +164,10 @@ AS<span style="font-family:Brush Script MT, Brush Script Std, cursive">PAPER</sp
                 </div>
                 <div class="addr">         
                     {{sub .Address 0 18}}<br>
-                    &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp{{sub .Address 18 30}}<br>
-                    &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp{{sub .Address 30 42}}<br>
-                    &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp{{sub .Address 42 54}}<br>
-                    &nbsp&nbsp&nbsp&nbsp&nbsp{{sub .Address 54 67}}<br>
+                    {{sub .Address 18 30}}<br>
+                    {{sub .Address 30 42}}<br>
+                    {{sub .Address 42 54}}<br>
+                    {{sub .Address 54 67}}<br>
                 </div>
             </div>
         </page>
