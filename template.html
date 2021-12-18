@@ -1,27 +1,177 @@
 <html>
     <head>
-        <title>KASPAPER - KASPA Paper Wallet</title>
+        <style>
+            body {
+                background: white;
+            }
+
+            page {
+                background: white;
+                display: block;
+                margin: 0 auto;
+                margin-bottom: 0.5cm;
+                padding: 0.5cm;
+            }
+
+            page[size="A4"] {
+                width: 21cm;
+                height: 29.7cm;
+            }
+
+            h1 {
+                font-family:'Courier New', Courier, monospace;
+                color: rgba(120,120,120);
+                text-align: center;
+            }
+
+            h2 {
+                text-align: center;
+                font-variant: small-caps;
+                font-size: 25pt;
+            }
+
+            p {
+                text-align: center;
+            }
+
+            #scissors {
+                height: 50px; /* image height */
+                width: 90%;
+                margin: auto auto;
+                background-image: url('scis.png');
+                background-size: 40px;
+                background-repeat: no-repeat;
+                background-position: right;
+                position: relative;
+                overflow: hidden;
+            }
+
+            #scissors:after {
+                content: "";
+                position: relative;
+                top: 50%;
+                display: block;
+                border-top: 3px dashed black;
+                margin-top: 2px;
+            }
+
+            #instructions {
+                margin-right:30px
+            }
+
+            #instructions li {
+                font-variant: small-caps;
+                font-weight: 300;
+                display:inline-block;
+                vertical-align:top;
+                text-align: justify;
+                width:45%;
+                margin: 15px;
+            }
+
+            #website {
+                text-align: center;
+                border: solid 2px;
+                margin: 30px;
+                margin-top: 15px;
+                padding: 5px;
+            }
+
+            #mnemonic {
+                columns: 4;
+
+            }
+
+            #mnemonic span {
+                font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+                font-size: 20pt
+            }
+
+            .QR {
+                float:left;
+            }
+
+            .addr {
+                float: right;
+                font-family: monospace;
+                font-size: 30pt;
+                margin-right: 50px;
+                width: 400px;
+                word-wrap: break-word;
+            }
+
+            #QR {
+                outline: 5px solid black;
+                outline-offset: -15px;
+                margin-left: 50px;
+            }
+
+            #url {
+                margin-top : -45px;
+                margin-left: 300px;
+            }
+
+            #bg1 {
+                position: absolute;
+                left:0px;
+                top:0px;
+                z-index:-1;
+            }
+        </style>
+        <title>KASPAPER — KASPA Paper Wallet</title>
     </head>
     <body>
-        <h1>KASPAPER - KASPA Paper Wallet</h1>
-        <div>
-            <h2>Private info</h2>
-            (keep private)<br/>
-            Your mnemonic phrase:
-            <ol style="columns: 2">
-                {{range .Mnemonic}}
-                    <li>{{.}}</li>
-                {{end}}
-            </ol>
-        </div>
-        <div>
-            <h2>Public info</h2>
-            (Show to people who wish to send you KASPA)<br/>
-            <p>Your address: {{.Address}}</p>
-            <p>
-                Your address QR code: <br/>
-                <img src="data:image/png;base64, {{.AddressQR}}" alt="Address QR" />
+        <page size="A4">
+            <h1 style = "margin-top: 0px;">
+                <img src="data:image/svg+xml;base64, PD94bWwgdmVyc2lvbj0iMS4wIiBzdGFuZGFsb25lPSJubyI/Pgo8IURPQ1RZUEUgc3ZnIFBVQkxJQyAiLS8vVzNDLy9EVEQgU1ZHIDIwMDEwOTA0Ly9FTiIKICJodHRwOi8vd3d3LnczLm9yZy9UUi8yMDAxL1JFQy1TVkctMjAwMTA5MDQvRFREL3N2ZzEwLmR0ZCI+CjxzdmcgdmVyc2lvbj0iMS4wIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciCiB3aWR0aD0iNjg2LjAwMDAwMHB0IiBoZWlnaHQ9IjY4Ni4wMDAwMDBwdCIgdmlld0JveD0iMCAwIDY4Ni4wMDAwMDAgNjg2LjAwMDAwMCIKIHByZXNlcnZlQXNwZWN0UmF0aW89InhNaWRZTWlkIG1lZXQiPgoKPGcgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMC4wMDAwMDAsNjg2LjAwMDAwMCkgc2NhbGUoMC4xMDAwMDAsLTAuMTAwMDAwKSIKZmlsbD0iIzAwMDAwMCIgc3Ryb2tlPSJub25lIj4KPHBhdGggZD0iTTMwNTMgNjg0NSBjLTY5MSAtNzkgLTEzMjcgLTM1NCAtMTg1OSAtODA2IC0xMjIgLTEwNCAtMzY4IC0zNjEKLTQ2OCAtNDg5IC0xNDYgLTE4NyAtMjYwIC0zNzEgLTM3MSAtNTk1IC0xNzggLTM2MCAtMjc0IC02NzIgLTMzMiAtMTA3OCAtMjUKLTE3NSAtMjUgLTcxOSAwIC04OTQgNTcgLTQwNSAxNTQgLTcxOCAzMzIgLTEwNzggNDgzIC05NzcgMTM4OSAtMTY2MCAyNDYxCi0xODU1IDM3MCAtNjcgODU4IC02NyAxMjI4IDAgOTIzIDE2OCAxNzMxIDcwMSAyMjUxIDE0ODUgMjg5IDQzNiA0NjUgOTA2IDU0MgoxNDQ4IDI1IDE3NSAyNSA3MTkgMCA4OTQgLTU4IDQwNiAtMTU0IDcxOCAtMzMyIDEwNzggLTE2OSAzNDEgLTM0NyA1OTQgLTYxMAo4NjQgLTMwMiAzMTAgLTU2NCA1MDEgLTk1MCA2OTEgLTM0NiAxNzEgLTY2NyAyNzAgLTEwNTcgMzI2IC0xNTcgMjIgLTY2OSAyOAotODM1IDl6IG0xMjk3IC0zNDE1IGwwIC0xODQwIC0yODAgMCAtMjgwIDAgLTIgNzg0IGMtMiA0MzEgLTYgNzg4IC0xMCA3OTIgLTQKNCAtMjUgLTggLTQ2IC0yNyAtMjIgLTE5IC03NiAtNjMgLTEyMiAtOTkgLTM1MiAtMjc2IC00NDcgLTM0OSAtNTgxIC00NTUgLTg1Ci02NiAtMTY4IC0xMzEgLTE4NiAtMTQ1IC0xOTIgLTE0OCAtMjkyIC0yMjYgLTM4NSAtMzAxIC02MSAtNDkgLTExNyAtODkgLTEyNAotODkgLTcgMCAtMTYgOSAtMTkgMjAgLTMgMTEgLTEyIDI2IC0xOCAzMiAtNyA3IC0zMyA0MCAtNTkgNzMgLTI2IDMzIC05MiAxMTcKLTE0NyAxODcgLTk2IDEyMSAtMTEyIDE0OCAtOTIgMTQ4IDUgMCA2NiA0NiAxMzcgMTAzIDcxIDU2IDE2MyAxMjggMjA0IDE1OQo0MSAzMSAxMjUgOTUgMTg1IDE0MiAyMTcgMTcwIDQwMSAzMTIgNDkwIDM4MCAxNTUgMTE4IDIwOCAxNTkgMjcxIDIxMSAzMyAyOAo2OSA1NSA4MCA2MiAxOSAxMSAxOSAxMiAtMiAyNyAtMTEgOCAtNDEgMzEgLTY1IDUxIC02NiA1NCAtNzEgNTggLTEwOCA4NSAtMTkKMTMgLTEwMyA3OCAtMTg3IDE0NCAtMTQ4IDExNiAtMjY4IDIxMCAtNDE4IDMyNSAtMzkgMzAgLTczIDU3IC03NiA2MSAtNSA2Ci0xNjQgMTI3IC0zMTIgMjM3IC00OSAzNiAtODggNzEgLTg4IDc4IDAgNyA3IDE4IDE2IDI2IDkgNyA0NyA1NCA4NSAxMDMgMzgKNTAgOTIgMTIwIDEyMCAxNTYgMjggMzYgNjcgODYgODYgMTEzIDE5IDI2IDM4IDQ3IDQyIDQ3IDUgMCAyMSAtMTEgMzcgLTI1IDI2Ci0yMyA4NCAtNjkgMjcyIC0yMTQgNTYgLTQzIDIyMSAtMTczIDQ1OCAtMzYwIDY2IC01MyAxNTggLTEyNSAyMDQgLTE2MSAxODAKLTEzOSAyOTYgLTIzMyAzMjAgLTI1OCBsMjUgLTI2IDYgMjkgYzQgMTcgNyAzMDggOCA2NDggbDEgNjE3IDI4MCAwIDI4MCAwIDAKLTE4NDB6Ii8+CjwvZz4KPC9zdmc+Cg=="
+                     alt="K" width="70" style="vertical-align:middle;margin-right: -40px; margin-bottom: 5px;" />
+AS<span style="font-family:Brush Script MT, Brush Script Std, cursive">PAPER</span> - KASPA Paper Wallet</h1>
+                <h2 style="margin-top:-10px; margin-bottom: 0;">Instructions</h2>
+                <ul id="instructions">
+                    <li>
+                        The part of the page below the scissor line contains the public address of your wallet.
+                        The address is also stored inside a QR code to save yourself the work of typing it each time.
+                        You should keep this part of the page on your person at all times (or at least at all times in
+                        which people might want to transfer Kaspa to you.)
+                    </li>
+                    <li>
+                        The part of the page above the scissor line contains a <emph>mnemonic phrase</emph> which could
+                        be used to transfer money from your wallet.
+                        <strong>You should keep this portion of the page in a safe place and only show it to people you
+                        trust.</strong>
+                        If you lose it, you lose all the coins in the wallet with it. Anyone who obtains the mnemonic
+                        phrase can withdraw the Kaspa from the wallet.</li>
+                </ul>
+
+            <p id="website">
+                For instruction for transferring money from a Kaspaper wallet or creating more Kaspaper wallets please visit
+                <strong>https://github.com/svarogg/kaspaper</strong>.
             </p>
-        </div>
+            <div>
+                <p style="font-family: 'Courier New', Courier, monospace; font-weight: bolder;"> {{.Address}}</p>
+                <h2>Private Key (KEEP PRIVATE!)</h2>
+                <ol id="mnemonic">
+                    {{range .Mnemonic}}
+                    <li><span>{{.}}</span></li>
+                    {{end}}
+                </ol>
+            </div>
+            <div id="scissors"></div>
+            <div>
+                <h1 style="margin-top: 0px;">
+                    <img src="data:image/svg+xml;base64, PD94bWwgdmVyc2lvbj0iMS4wIiBzdGFuZGFsb25lPSJubyI/Pgo8IURPQ1RZUEUgc3ZnIFBVQkxJQyAiLS8vVzNDLy9EVEQgU1ZHIDIwMDEwOTA0Ly9FTiIKICJodHRwOi8vd3d3LnczLm9yZy9UUi8yMDAxL1JFQy1TVkctMjAwMTA5MDQvRFREL3N2ZzEwLmR0ZCI+CjxzdmcgdmVyc2lvbj0iMS4wIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciCiB3aWR0aD0iNjg2LjAwMDAwMHB0IiBoZWlnaHQ9IjY4Ni4wMDAwMDBwdCIgdmlld0JveD0iMCAwIDY4Ni4wMDAwMDAgNjg2LjAwMDAwMCIKIHByZXNlcnZlQXNwZWN0UmF0aW89InhNaWRZTWlkIG1lZXQiPgoKPGcgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMC4wMDAwMDAsNjg2LjAwMDAwMCkgc2NhbGUoMC4xMDAwMDAsLTAuMTAwMDAwKSIKZmlsbD0iIzAwMDAwMCIgc3Ryb2tlPSJub25lIj4KPHBhdGggZD0iTTMwNTMgNjg0NSBjLTY5MSAtNzkgLTEzMjcgLTM1NCAtMTg1OSAtODA2IC0xMjIgLTEwNCAtMzY4IC0zNjEKLTQ2OCAtNDg5IC0xNDYgLTE4NyAtMjYwIC0zNzEgLTM3MSAtNTk1IC0xNzggLTM2MCAtMjc0IC02NzIgLTMzMiAtMTA3OCAtMjUKLTE3NSAtMjUgLTcxOSAwIC04OTQgNTcgLTQwNSAxNTQgLTcxOCAzMzIgLTEwNzggNDgzIC05NzcgMTM4OSAtMTY2MCAyNDYxCi0xODU1IDM3MCAtNjcgODU4IC02NyAxMjI4IDAgOTIzIDE2OCAxNzMxIDcwMSAyMjUxIDE0ODUgMjg5IDQzNiA0NjUgOTA2IDU0MgoxNDQ4IDI1IDE3NSAyNSA3MTkgMCA4OTQgLTU4IDQwNiAtMTU0IDcxOCAtMzMyIDEwNzggLTE2OSAzNDEgLTM0NyA1OTQgLTYxMAo4NjQgLTMwMiAzMTAgLTU2NCA1MDEgLTk1MCA2OTEgLTM0NiAxNzEgLTY2NyAyNzAgLTEwNTcgMzI2IC0xNTcgMjIgLTY2OSAyOAotODM1IDl6IG0xMjk3IC0zNDE1IGwwIC0xODQwIC0yODAgMCAtMjgwIDAgLTIgNzg0IGMtMiA0MzEgLTYgNzg4IC0xMCA3OTIgLTQKNCAtMjUgLTggLTQ2IC0yNyAtMjIgLTE5IC03NiAtNjMgLTEyMiAtOTkgLTM1MiAtMjc2IC00NDcgLTM0OSAtNTgxIC00NTUgLTg1Ci02NiAtMTY4IC0xMzEgLTE4NiAtMTQ1IC0xOTIgLTE0OCAtMjkyIC0yMjYgLTM4NSAtMzAxIC02MSAtNDkgLTExNyAtODkgLTEyNAotODkgLTcgMCAtMTYgOSAtMTkgMjAgLTMgMTEgLTEyIDI2IC0xOCAzMiAtNyA3IC0zMyA0MCAtNTkgNzMgLTI2IDMzIC05MiAxMTcKLTE0NyAxODcgLTk2IDEyMSAtMTEyIDE0OCAtOTIgMTQ4IDUgMCA2NiA0NiAxMzcgMTAzIDcxIDU2IDE2MyAxMjggMjA0IDE1OQo0MSAzMSAxMjUgOTUgMTg1IDE0MiAyMTcgMTcwIDQwMSAzMTIgNDkwIDM4MCAxNTUgMTE4IDIwOCAxNTkgMjcxIDIxMSAzMyAyOAo2OSA1NSA4MCA2MiAxOSAxMSAxOSAxMiAtMiAyNyAtMTEgOCAtNDEgMzEgLTY1IDUxIC02NiA1NCAtNzEgNTggLTEwOCA4NSAtMTkKMTMgLTEwMyA3OCAtMTg3IDE0NCAtMTQ4IDExNiAtMjY4IDIxMCAtNDE4IDMyNSAtMzkgMzAgLTczIDU3IC03NiA2MSAtNSA2Ci0xNjQgMTI3IC0zMTIgMjM3IC00OSAzNiAtODggNzEgLTg4IDc4IDAgNyA3IDE4IDE2IDI2IDkgNyA0NyA1NCA4NSAxMDMgMzgKNTAgOTIgMTIwIDEyMCAxNTYgMjggMzYgNjcgODYgODYgMTEzIDE5IDI2IDM4IDQ3IDQyIDQ3IDUgMCAyMSAtMTEgMzcgLTI1IDI2Ci0yMyA4NCAtNjkgMjcyIC0yMTQgNTYgLTQzIDIyMSAtMTczIDQ1OCAtMzYwIDY2IC01MyAxNTggLTEyNSAyMDQgLTE2MSAxODAKLTEzOSAyOTYgLTIzMyAzMjAgLTI1OCBsMjUgLTI2IDYgMjkgYzQgMTcgNyAzMDggOCA2NDggbDEgNjE3IDI4MCAwIDI4MCAwIDAKLTE4NDB6Ii8+CjwvZz4KPC9zdmc+Cg=="
+                         alt="K" width="70" style="vertical-align:middle;margin-right: -40px; margin-bottom: 5px;" />
+                    AS<span style="font-family:Brush Script MT, Brush Script Std, cursive">PAPER</span> - KASPA Paper Wallet
+                </h1>
+                
+                <p id = "url">https://github.com/svarogg/kaspaper</p>
+                <div class = "QR">
+                    <img id = "QR" src="data:image/png;base64, {{.AddressQR}}" alt="Address QR" />
+                </div>
+                <div class="addr">
+                    {{.Address}}
+                </div>
+            </div>
+        </page>
     </body>
 </html>
