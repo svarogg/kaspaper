@@ -1,5 +1,14 @@
 package kaspaperlib
+import (
+	"crypto/rand"
+)
 
 func generatePassword() string {
-	return "password" // TODO: v v v secure random password, nobody ever will guess
+	password := make([]byte, 16)
+	_, err := rand.Read(password)
+	if err != nil {
+		return nil, err
+	}
+
+	return string(password), nil
 }

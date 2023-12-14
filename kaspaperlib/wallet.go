@@ -27,7 +27,10 @@ func newWallet(dagParams *dagconfig.Params, mnemonic string) (model.KaspaperWall
 	mnemonicString := &model.MnemonicString{}
 	copy(mnemonicString[:], strings.Split(mnemonic, " ")) // We assume it splits to 24 words
 
-	password := generatePassword()
+	password, err := generatePassword()
+	if err != nil {
+		return nil, err
+	}
 
 	keysFile, err := keys.NewFileFromMnemonic(dagParams, mnemonicString.String(), password)
 	if err != nil {
