@@ -3,11 +3,11 @@ import (
 	"crypto/rand"
 )
 
-func generatePassword() string {
+func generatePassword() (string, error) {
 	password := make([]byte, 16)
 	_, err := rand.Read(password)
 	if err != nil {
-		return nil, err
+		return "", err
 	}
 
 	return string(password), nil
