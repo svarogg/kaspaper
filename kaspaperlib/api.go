@@ -5,6 +5,8 @@ import (
 	"github.com/kaspanet/kaspad/domain/dagconfig"
 	"github.com/svarogg/kaspaper/model"
 	"github.com/kaspanet/kaspad/cmd/kaspawallet/utils"
+	"github.com/pkg/errors"
+	"github.com/tyler-smith/go-bip39"
 	"fmt"
 	"os"
 	"bufio"
@@ -37,9 +39,11 @@ func (a *api) GenerateWallet() (model.KaspaperWallet, error) {
 
 		fmt.Printf("Creating new mnemonics\n")
 		mnemonics, err = libkaspawallet.CreateMnemonic()
-		return newWallet(a.dagParams, mnemonics)//
 	} else {
-	// It's safe to use [0] because we know there's exactly 1 key, since we passed numKeys: 1 to CreateMnemonics
-		return newWallet(a.dagParams, mnemonics)
+
+		if !bip39.IsMnemonicValid(string(mnemonics)) {
+			return nil, errors.Errorf("mnemonic is invalid")
+		}
 	}
+	return newWallet(a.dagParams, mnemonics)
 }
