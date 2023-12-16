@@ -16,6 +16,8 @@ type walletTemplate struct {
 	Mnemonic  *model.MnemonicString
 	Address   string
 	AddressQR string
+	KPubKey string
+	KPubKeyQR string
 }
 
 func renderWallet(wallet model.KaspaperWallet) (string, error) {
@@ -53,9 +55,21 @@ func walletToWalletTempalte(wallet model.KaspaperWallet) (*walletTemplate, error
 	}
 	addressQRBase64 := base64.StdEncoding.EncodeToString(addressQRbytes)
 
+
+	kpubKeyQRbytes, err := wallet.KPubKeyQR()
+	if err != nil {
+		return nil, err
+	}
+	kpubKeyBase64 := base64.StdEncoding.EncodeToString(kpubKeyQRbytes)
+	kpubKey := wallet.KPubKey();
+
+
+
 	return &walletTemplate{
 		Mnemonic:  wallet.Mnemonic(),
 		Address:   address,
 		AddressQR: addressQRBase64,
+		KPubKey : kpubKey,
+		KPubKeyQR: kpubKeyBase64,
 	}, nil
 }
